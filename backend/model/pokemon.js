@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 
 const pokemonSchema = new mongoose.Schema({
-    id: Number,
+    pokemonId: Number,
     name: String,
+    height: Number,
+    weight: Number,
+    types: [String],
     moreDataUrl: String,
     spriteUrl: String
 });
