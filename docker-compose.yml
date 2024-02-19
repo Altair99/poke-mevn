@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  mongodb:
+    # MongoDB service configuration...
+    image: mongo:latest
+    container_name: my-mongodb
+    #environment:
+      #MONGO_INITDB_ROOT_USERNAME: admin
+      #MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - my-network
+
+  express:
+    container_name: poke-server
+    # Build the Express.js server service using the Dockerfile in the current directory
+    build:
+      context: ./backend
+    # Set environment variables for the Express.js server (optional)
+    # environment:
+    #   NODE_ENV: production
+    # Expose the port on which the Express.js server will run
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+
+  # vue:
+  #   container_name: poke-web
+  #   # Build the Vue frontend service using the Dockerfile in the current directory
+  #   build:
+  #     context: ./frontend
+  #   # Expose the port on which the Vue frontend will run
+  #   ports:
+  #     - "5173:5173"
+
+# Specify volumes if needed
+volumes:
+  mongodb_data:
+
+# Set the network
+networks:
+  my-network:
+    driver: bridge
