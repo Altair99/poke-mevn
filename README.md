@@ -37,10 +37,6 @@ The project use the MEVN stack with the following technologies.
 
 Contributions to improve this project are welcome! If you would like to contribute, please fork the repository and submit a pull request with your changes.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Contact
 
 If you have any questions or suggestions about the PokéApp, feel free to contact us at [luis.v.priego@gmail.com](mailto:luis.v.priego@gmail.com).
