@@ -9,19 +9,19 @@ const PORT = 3000;
 
 // Connection to db
 mongoose
-	.connect("mongodb://localhost:27017/poke")
+	.connect("mongodb://mongodb:27017/poke")
 	.then(async () => {
 		console.log("Connected to MongoDB");
 
-		await fetchAndSavePokemons();
+		await fetchAndSavePokemons().then(() => {
+			// Use the routes file
+			app.use("/api", routes);
 
-		// Use the routes file
-		app.use("/api", routes);
-
-		// Start server
-		app.listen(PORT, () =>
-			console.log("Example app is listening on port 3000.")
-		);
+			// Start server
+			app.listen(PORT, () =>
+				console.log("Example app is listening on port 3000.")
+			);
+		});
 	})
 	.catch((err) => console.error("Error connecting to MongoDB:", err));
 
@@ -37,7 +37,7 @@ async function fetchAndSavePokemons() {
 		);
 		const pokemonCount = responseCount.data.count;
 		const response = await axios.get(
-			`https://pokeapi.co/api/v2/pokemon?offset=800&limit=${pokemonCount}}`
+			`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${pokemonCount}}`
 		);
 
 		// Fetch the addtional data per pokemon
