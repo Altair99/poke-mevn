@@ -6,8 +6,8 @@ Welcome to the PokéApp web application! This app allows you to browse a list of
 
 To run the project, make sure you have the following installed on your local machine:
 
-- Docker Engine
-- Node
+- [Docker Engine](https://docs.docker.com/engine/install/)
+- [Node](https://nodejs.org/en/download)
 
 Once you have Docker Engine and Node installed, follow these steps:
 
