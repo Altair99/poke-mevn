@@ -7,7 +7,8 @@ const pokemonSchema = new mongoose.Schema({
     weight: Number,
     types: [String],
     moreDataUrl: String,
-    spriteUrl: String
+    spriteUrl: String,
+    spriteGifUrl: String
 });
 
 const pokemon = mongoose.model("pokemon", pokemonSchema);

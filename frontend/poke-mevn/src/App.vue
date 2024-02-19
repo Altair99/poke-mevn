@@ -7,11 +7,13 @@ import PokemonContent from './components/PokemonContent.vue';
 <template>
   <div class="container">
     <PokemonLogo />
-    <PokemonSearchbar @search="searchPokemon" />
+    <PokemonSearchbar @search="searchPokemon" @toggleAnimation="toggleAnimation" />
   </div>
-  <main>
-    <PokemonContent :pokemonsData="pokemons" />
-  </main>
+  <div class="grid-container">
+    <main>
+      <PokemonContent :pokemonsData="pokemons" :searchQuery="searchQueryName" :animated="animated" @fetchPokemonsCallback="fetchPokemons" />
+    </main>
+  </div>
 </template>
 
 
@@ -26,29 +28,40 @@ interface Pokemon {
   types: string[],
   name: string;
   spriteUrl: string;
+  spriteGifUrl: string;
 }
 
 export default defineComponent({
   data() {
     return {
-      pokemons: [] as Pokemon[]
+      pokemons: [] as Pokemon[],
+      searchQueryName: "",
+      animated: false,
     };
   },
   mounted() {
     // Get the first set of pokemons
-    this.fetchPokemons(0);
+    this.fetchPokemons(0, 40);
   },
   methods: {
     async searchPokemon(pokemonName: string) {
       try {
-        // Make API call to fetch Pokémon data based on searchQuery
-        console.log(`http://localhost:3000/api/search-pokemon?name=${pokemonName}`);
+        this.searchQueryName = pokemonName;
+
+        // Clean the array
+        this.pokemons = [];
+
+        if (!pokemonName) {
+          this.fetchPokemons(0, 40);
+          return;
+        }
+
         const response = await fetch(`http://localhost:3000/api/search-pokemon?name=${pokemonName}`);
         // console.log(response);
         const data = await response.json();
         console.log("data:", data);
 
-        this.pokemons = data;
+        this.pokemons.push(...data.pokemons);
         console.log("Pokemons:", this.pokemons);
 
       } catch (error) {
@@ -56,24 +69,25 @@ export default defineComponent({
         // Handle erro
       }
     },
-    async fetchPokemons(offset: number) {
+    async fetchPokemons(offset: number, limit: number) {
       try {
-        // The limit set for the pagination
-        const limit = 60;
-        // Make API call to fetch Pokémon data based on searchQuery
-        console.log(`http://localhost:3000/api/fetch-pokemons?limit=${limit}&offset=${offset}`);
+
         const response = await fetch(`http://localhost:3000/api/fetch-pokemons?limit=${limit}&offset=${offset}`);
+
         // console.log(response);
         const data = await response.json();
         console.log("data:", data);
 
-        this.pokemons = data.pokemons;
+        this.pokemons.push(...data.pokemons);
         console.log("Pokemons:", this.pokemons);
 
       } catch (error) {
         console.error('Error fetching Pokémon data:', error);
         // Handle erro
       }
+    },
+    toggleAnimation(animated: boolean) {
+      this.animated = animated;
     }
   }
 });
@@ -86,10 +100,12 @@ export default defineComponent({
   align-items: center;
 }
 
+.grid-container {
+  width: 100%;
+}
+
 .logo {
   display: block;
   margin: 0 auto 2rem;
 }
-
-@media (min-width: 1024px) {}
 </style>

@@ -37,7 +37,7 @@ async function fetchAndSavePokemons() {
 		);
 		const pokemonCount = responseCount.data.count;
 		const response = await axios.get(
-			`https://pokeapi.co/api/v2/pokemon?limit=${pokemonCount}&offset=0}`
+			`https://pokeapi.co/api/v2/pokemon?offset=800&limit=${pokemonCount}}`
 		);
 
 		// Fetch the addtional data per pokemon
@@ -52,22 +52,36 @@ async function fetchAndSavePokemons() {
 					pokemonTypes.push(element.type.name)
 				);
 
-				// Save the pokemon data to the database
-				await pokemonModel.findOneAndUpdate(
-					{ pokemonId: Number(pokemonDetail.id) },
-					{
-						$setOnInsert: {
-							pokemonId: Number(pokemonDetail.id),
-							name: pokemon.name,
-							height: Number(pokemonDetail.height),
-							weight: Number(pokemonDetail.weight),
-							types: pokemonTypes,
-							moreDataUrl: pokemon.url,
-							spriteUrl: pokemonDetail.sprites.front_default,
+				// IMPORTANT: Some pokemons dosent have the svg file so we need to check if null to get the image from folder place
+				const spriteUrl =
+					pokemonDetail.sprites.other.dream_world.front_default == null
+						? pokemonDetail.sprites.front_default
+						: pokemonDetail.sprites.other.dream_world.front_default;
+
+				// If the pokemon does not have the sprites from the folder we are looking dont save it to the db
+				if (spriteUrl != null) {
+					// Save the pokemon data to the database
+					await pokemonModel.findOneAndUpdate(
+						{ pokemonId: Number(pokemonDetail.id) },
+						{
+							$setOnInsert: {
+								pokemonId: Number(pokemonDetail.id),
+								name: pokemon.name,
+								height: Number(pokemonDetail.height),
+								weight: Number(pokemonDetail.weight),
+								types: pokemonTypes,
+								moreDataUrl: pokemon.url,
+								spriteUrl: spriteUrl,
+								// This is just a feature a like to add to show the gif
+								spriteGifUrl:
+									pokemonDetail.sprites.other.showdown.front_default == null
+										? pokemonDetail.sprites.front_default
+										: pokemonDetail.sprites.other.showdown.front_default,
+							},
 						},
-					},
-					{ upsert: true, new: true }
-				);
+						{ upsert: true, new: true }
+					);
+				}
 			})
 		);
 	} catch (error) {
