@@ -1,11 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
-import routes from "./routes/routes.js";
 import axios from "axios";
+import cors from "cors";
+import routes from "./routes/routes.js";
 import pokemonModel from "./model/pokemon.js";
 
 const app = express();
 const PORT = 3000;
+
+// Enable all cors request
+app.use(cors());
 
 // Connection to db
 mongoose
