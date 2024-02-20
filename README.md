@@ -6,8 +6,8 @@ Welcome to the PokéApp web application! This app allows you to browse a list of
 
 To run the project, make sure you have the following installed on your local machine:
 
-- Docker Engine
-- Node
+- [Docker Engine](https://docs.docker.com/engine/install/)
+- [Node](https://nodejs.org/en/download)
 
 Once you have Docker Engine and Node installed, follow these steps:
 
@@ -36,10 +36,6 @@ The project use the MEVN stack with the following technologies.
 ## Contributing
 
 Contributions to improve this project are welcome! If you would like to contribute, please fork the repository and submit a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
